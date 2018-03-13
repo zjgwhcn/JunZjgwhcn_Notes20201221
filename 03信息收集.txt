@@ -1,0 +1,70 @@
+一：信息收集：
+	目标：www.dadigua.win
+	1.whois信息查询
+		网址：http://who.is whois.chinaz.com whois.aizhan.com
+		关注信息：注册商、联系人、DNS解析服务器
+		(如果在站长之家上有隐藏信息，可在who.is上再次查看)
+	2.利用响应头简单分析网站
+		Server:nginx/1.1.19  网站中间件
+		X-Powered-By:Express  网站脚本语言(得到目标网站是脚本语言)
+		Server:Apache/2.2.25 (win32) PHP/5.3.5(网站中间件为apache  程序语言为PHP)
+		firefox插件：wapplayzer
+	3.爬行网站目录结构
+		WebRobot  网络蜘蛛  右键添加URL爬行即可(不推荐）
+		推荐使用扫描器AWVS的siteCrawler模块（首推）
+		但是在使用之前建议先修改工具的默认useragent
+		    Configuration---》scan Settings  --》HTTP Options -->useragent String
+		    Baiduspide+（+https://www.baidu.com/search/spider.htm)
+		为什么要修改工具的UA
+			比如,你的目标网站有安全狗等防护软件,
+			Mozilla/5.0(Linux;U;Android4.4.4;  Nexus 5 Buile/KTU84P) AppleWebkit/534.30 (KHTML,  like Gecko)  Version/4.0  Mobil Safari/534.30
+		Firefox代理插件:Proxy  Switcher
+		Burpsuite spider模块爬行:
+			1.proxy代理:浏览器设置代理host:127.0.0..1 port:8080
+				proxy-->options127.0.0.1:8080(如果为空的话,点击add按钮,设置一下端口就可以了)
+				若running框中的选项无法选中,表示该端口已被其他程序占用
+			2.Proxy代理模块抓到包之后,右键-->send to spider
+			3.爬行结果是显示在target模块中
+	4.对网站目录进行爆破扫描
+		dirbrute  工具内置爬行效果
+	5.对爬行结果中得到的目录结构要再次爆破扫描
+	6.二级域名
+		www.dadigua.win
+		xss.dadingua.win
+		forum.dadigua.wein
+		1.第一招:google语法
+			site  限制在某个目标查询    site:dadigua.win  比如site:.cn
+			inurl  在URL链接中查询  比如:我们要查URL中包含 admin  的链接  inurl:login.php    inurl:admin_login.pgp
+			intitile  在页面标题中查找到  比如:我们要查标题中包含"我是一个帅哥"  intitle:管理员登陆  intitle:后台登陆
+			intext  在网站正文内容中找文本
+			allinurl allintitle  allintext(不推荐使用all打头人google关键字)
+			site:fenqile.com -www -hui -zhaopin -help -dreamclub -item -open -channel -passport -mall -static -sale -cash -chong -b -m -res -chat
+		2.第二招:使用工具爆破得到二级域名
+			subDumain
+				options:
+				-o output, --output=OUTPUT    Output file name. default is{target}.txt
+				python subDumainsBrute.py dadigua.win -o oputpu.txt
+				优点:在爆破域名时,自动返回响应IP地址(甚至可能会返回七内网IP)mod.baidu.com  10.94.69.36
+				layer:
+				DNS定向检测
+				**注意:在得到二级域名之后,要对二级域名进行目录爬行,目录爆破操作
+	7.查询目标旁站信息
+		利用Bing.com 语法为:  http://cn.bing.com/search?q=ip:43.225.57.1
+			比如:目标网站为:www.eiserverywhere.com
+			1.ping www.eiseverywhere.com
+		站长之家:http://s.tool.chinaz.com/same
+		www.114best.com/ip/
+	8.查询目标服务器的开发端口情况
+	nmap: 最简单,最粗暴的方式就是: nmap xxx.xxx.xxx.xxx (不加任何参数的情况下,即默认扫描高危1000端口)
+		-p 指定端口扫描:  nmap xxx.xxx.xxx.xxx -p3306,6689,80-90,8080-8090,7001
+		-p 扫描所有端口:  nmap xxx.xxx.xxx.xxx -p-  (-p-  也可以替换成-p- 65535）
+		-sS 半开扫描（即SYN扫描，效率高，速度快）：nmap -sS -p xxx.xxx.xxx.xxx
+		-v 查看扫描详情（一般直接使用 -vv）
+
+		后期会着重讲解nmap的其他参数及所有script的使用 
+	9.查询C段网站信息(建议放在所有流程人最后)
+		查询C段网站的方法就是类似查询旁站信息 http://cn.bing.com/search?q=ip:43.225.57.1
+		比如目标IP为：43.225.57.112，我们只要批量查询43.225.57.1-43.225.57.225
+		推荐工具：K8_SideNote
+	    补充google语法小技巧：site：43.225.57.*
+
